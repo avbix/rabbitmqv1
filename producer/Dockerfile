@@ -1,17 +1,17 @@
-# basic python image
+# Use the Python 3.7 image as the base.
 FROM python:3.7
 
-# install pika to access rabbitmq
+# Install the 'pika' package to access RabbitMQ.
 RUN pip install pika
 
-# Without this setting, Python never prints anything out.
+# Set the environment variable to enable unbuffered mode for Python output.
 ENV PYTHONUNBUFFERED=1
 
-# declare the source directory
+# Declare the working directory inside the container.
 WORKDIR /usr/src/app/producer
 
-# copy the file
+# Copy the 'producer.py' file from the current directory into the container.
 COPY producer.py .
 
-# start command
+# Define the command that will be executed when the container starts.
 CMD [ "python", "producer.py" ]
