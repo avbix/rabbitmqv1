@@ -16,8 +16,6 @@ services:
     build: producer # Build the 'producer' service using the Dockerfile in the 'producer' directory.
     depends_on:
         - rabbit_mq # Specify that the 'producer' service depends on the 'rabbit_mq' service.
-    environment:
-        AMQP_URL: 'amqp://rabbit_mq?connection_attempts=10&retry_delay=10' # Set the AMQP URL for the producer.
     volumes:
       - ./producer:/usr/src/app/producer # Mount the 'producer' code into the 'producer' service container.
 
