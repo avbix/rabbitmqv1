@@ -9,24 +9,24 @@ connection = pika.BlockingConnection(url_params)
 
 channel = connection.channel()
 
-# Определяем имя exchange и тип (в данном случае "direct")
+# Define the exchange name and type (in this case, "direct").
 exchange_name = 'direct_logs'
 exchange_type = 'direct'
 
-# Объявляем exchange
+# Declare the exchange.
 channel.exchange_declare(exchange=exchange_name, exchange_type=exchange_type)
 
-# Определяем имя очереди
+# Define the queue name.
 queue_name = 'my_queue'
 
-# Объявляем очередь
+# Declare the queue.
 channel.queue_declare(queue=queue_name)
 
-# Привязываем очередь к exchange с определенным routing key
-routing_key = 'info'  # Это может быть любой ключ, который соответствует маршрутизации
+# Bind the queue to the exchange with a specific routing key.
+routing_key = 'info'  # This can be any key that matches the routing.
 channel.queue_bind(exchange=exchange_name, queue=queue_name, routing_key=routing_key)
 
-# Отправляем сообщение в exchange с указанным routing key
+# Send a message to the exchange with the specified routing key.
 message = 'Hello, RabbitMQ!'
 channel.basic_publish(exchange=exchange_name, routing_key=routing_key, body=message)
 
