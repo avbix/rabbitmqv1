@@ -10,9 +10,8 @@ connection = pika.BlockingConnection(url_params)
 # Create a channel for communication.
 chan = connection.channel()
 
-# Declare three queues named 'A', 'B', and 'C'.
+# Declare three queues named 'A'.
 chan.queue_declare(queue='A')
-
 
 # Publish messages to the queues.
 chan.basic_publish(exchange='', routing_key='A', body='Hello-A!')
