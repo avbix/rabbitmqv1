@@ -7,20 +7,33 @@ url_params = pika.URLParameters('amqp://rabbit_mq?connection_attempts=10&retry_d
 # Establish a blocking connection to the RabbitMQ server.
 connection = pika.BlockingConnection(url_params)
 
-# Create a channel for communication.
-chan = connection.channel()
+channel = connection.channel()
 
-# Declare three queues named 'A'.
-chan.queue_declare(queue='A')
+# Определяем имя exchange и тип (в данном случае "direct")
+exchange_name = 'direct_logs'
+exchange_type = 'direct'
 
-# Publish messages to the queues.
-chan.basic_publish(exchange='', routing_key='A', body='Hello-A!')
+# Объявляем exchange
+channel.exchange_declare(exchange=exchange_name, exchange_type=exchange_type)
 
-# Print a message to indicate that the messages have been produced.
-print("Produced the message")
+# Определяем имя очереди
+queue_name = 'my_queue'
+
+# Объявляем очередь
+channel.queue_declare(queue=queue_name)
+
+# Привязываем очередь к exchange с определенным routing key
+routing_key = 'info'  # Это может быть любой ключ, который соответствует маршрутизации
+channel.queue_bind(exchange=exchange_name, queue=queue_name, routing_key=routing_key)
+
+# Отправляем сообщение в exchange с указанным routing key
+message = 'Hello, RabbitMQ!'
+channel.basic_publish(exchange=exchange_name, routing_key=routing_key, body=message)
+
+print(f"Sent: '{message}' with routing key '{routing_key}'")
 
 # Close the channel.
-chan.close()
+channel.close()
 
 # Close the connection to RabbitMQ.
 connection.close()
